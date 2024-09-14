@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracking App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .goal {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .progress-container {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Fitness Tracking App</h1>
+
+    <!-- Section to record workout -->
+    <div class="section">
+        <h2>Record Workout</h2>
+        <label for="exercise-type">Select Exercise Type:</label>
+        <select id="exercise-type">
+            <option value="Running">Running</option>
+            <option value="Cycling">Cycling</option>
+            <option value="Weight Lifting">Weight Lifting</option>
+            <option value="Swimming">Swimming</option>
+            <option value="Yoga">Yoga</option>
+        </select>
+
+        <label for="duration">Duration (minutes):</label>
+        <input type="number" id="duration" placeholder="Enter duration in minutes">
+
+        <label for="notes">Notes:</label>
+        <input type="text" id="notes" placeholder="Additional notes (optional)">
+
+        <button id="record-workout-btn">Record Workout</button>
+    </div>
+
+    <!-- Section to view progress -->
+    <div class="section">
+        <h2>Your Workout Progress</h2>
+        <div id="workout-progress" class="progress-container">
+            <!-- Workout entries will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Section to set fitness goals -->
+    <div class="section">
+        <h2>Set Fitness Goals</h2>
+        <label for="goal-type">Goal Type:</label>
+        <select id="goal-type">
+            <option value="Running">Running</option>
+            <option value="Cycling">Cycling</option>
+            <option value="Weight Lifting">Weight Lifting</option>
+            <option value="Swimming">Swimming</option>
+            <option value="Yoga">Yoga</option>
+        </select>
+
+        <label for="goal-duration">Target Duration (minutes):</label>
+        <input type="number" id="goal-duration" placeholder="Enter target duration in minutes">
+
+        <button id="set-goal-btn">Set Goal</button>
+
+        <div id="fitness-goals">
+            <!-- Fitness goals will be displayed here -->
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Storage for workout data and goals
+    let workouts = [];
+    let goals = [];
+
+    // DOM Elements
+    const exerciseTypeSelect = document.getElementById('exercise-type');
+    const durationInput = document.getElementById('duration');
+    const notesInput = document.getElementById('notes');
+    const workoutProgressDiv = document.getElementById('workout-progress');
+    const recordWorkoutBtn = document.getElementById('record-workout-btn');
+
+    const goalTypeSelect = document.getElementById('goal-type');
+    const goalDurationInput = document.getElementById('goal-duration');
+    const setGoalBtn = document.getElementById('set-goal-btn');
+    const fitnessGoalsDiv = document.getElementById('fitness-goals');
+
+    // Record Workout
+    recordWorkoutBtn.addEventListener('click', () => {
+        const exerciseType = exerciseTypeSelect.value;
+        const duration = parseInt(durationInput.value);
+        const notes = notesInput.value;
+
+        if (!duration || duration <= 0) {
+            alert('Please enter a valid duration.');
+            return;
+        }
+
+        // Add the workout data
+        const workout = {
+            exerciseType,
+            duration,
+            notes,
+            date: new Date().toLocaleDateString()
+        };
+        workouts.push(workout);
+
+        // Clear input fields
+        durationInput.value = '';
+        notesInput.value = '';
+
+        // Update workout progress
+        displayWorkoutProgress();
+    });
+
+    // Display Workout Progress
+    function displayWorkoutProgress() {
+        workoutProgressDiv.innerHTML = '';
+
+        workouts.forEach((workout, index) => {
+            workoutProgressDiv.innerHTML += `
+                <div class="goal">
+                    <p><strong>Exercise:</strong> ${workout.exerciseType}</p>
+                    <p><strong>Duration:</strong> ${workout.duration} minutes</p>
+                    <p><strong>Date:</strong> ${workout.date}</p>
+                    ${workout.notes ? `<p><strong>Notes:</strong> ${workout.notes}</p>` : ''}
+                </div>
+            `;
+        });
+    }
+
+    // Set Fitness Goal
+    setGoalBtn.addEventListener('click', () => {
+        const goalType = goalTypeSelect.value;
+        const goalDuration = parseInt(goalDurationInput.value);
+
+        if (!goalDuration || goalDuration <= 0) {
+            alert('Please enter a valid target duration.');
+            return;
+        }
+
+        // Add the fitness goal data
+        const goal = {
+            goalType,
+            goalDuration,
+            dateSet: new Date().toLocaleDateString()
+        };
+        goals.push(goal);
+
+        // Clear input fields
+        goalDurationInput.value = '';
+
+        // Update fitness goals display
+        displayFitnessGoals();
+    });
+
+    // Display Fitness Goals
+    function displayFitnessGoals() {
+        fitnessGoalsDiv.innerHTML = '';
+
+        goals.forEach((goal, index) => {
+            fitnessGoalsDiv.innerHTML += `
+                <div class="goal">
+                    <p><strong>Goal Type:</strong> ${goal.goalType}</p>
+                    <p><strong>Target Duration:</strong> ${goal.goalDuration} minutes</p>
+                    <p><strong>Date Set:</strong> ${goal.dateSet}</p>
+                </div>
+            `;
+        });
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #333;
+            padding: 10px;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+        .nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        section {
+            margin: 20px 0;
+        }
+        .lessons, .quizzes, .community, .progress {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .lesson-item, .achievement-item, .forum-post {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Language Learning App</h1>
+</header>
+
+<!-- Navigation -->
+<div class="nav">
+    <a href="#lessons">Lessons</a>
+    <a href="#quizzes">Quizzes</a>
+    <a href="#progress">Progress</a>
+    <a href="#community">Community</a>
+</div>
+
+<div class="container">
+    <!-- Lessons Section -->
+    <section id="lessons" class="lessons">
+        <h2>Interactive Lessons</h2>
+        <div class="lesson-item">
+            <p>Lesson 1: Basic Greetings</p>
+            <button onclick="completeLesson(1)">Complete Lesson</button>
+        </div>
+        <div class="lesson-item">
+            <p>Lesson 2: Numbers</p>
+            <button onclick="completeLesson(2)">Complete Lesson</button>
+        </div>
+        <div class="lesson-item">
+            <p>Lesson 3: Common Phrases</p>
+            <button onclick="completeLesson(3)">Complete Lesson</button>
+        </div>
+    </section>
+
+    <!-- Quizzes Section -->
+    <section id="quizzes" class="quizzes">
+        <h2>Take a Quiz</h2>
+        <div class="quiz-item">
+            <p>Quiz 1: Greetings and Numbers</p>
+            <button onclick="takeQuiz(1)">Take Quiz</button>
+        </div>
+    </section>
+
+    <!-- Gamified Experience (Progress & Achievements) -->
+    <section id="progress" class="progress">
+        <h2>Your Progress</h2>
+        <p>Lessons Completed: <span id="completed-lessons">0</span></p>
+        <p>Points Earned: <span id="points">0</span></p>
+
+        <h3>Achievements</h3>
+        <div class="achievement-item" id="achievement-1" style="display:none;">
+            <p><strong>Achievement Unlocked:</strong> First Lesson Completed!</p>
+        </div>
+        <div class="achievement-item" id="achievement-2" style="display:none;">
+            <p><strong>Achievement Unlocked:</strong> First Quiz Passed!</p>
+        </div>
+    </section>
+
+    <!-- Community Forum Section -->
+    <section id="community" class="community">
+        <h2>Community Forum</h2>
+        <form onsubmit="postForum(event)">
+            <textarea id="forum-input" placeholder="Write a post..." style="width: 100%; height: 100px;"></textarea>
+            <button type="submit">Post</button>
+        </form>
+        <div id="forum-posts">
+            <!-- Forum posts will appear here -->
+        </div>
+    </section>
+</div>
+
+<script>
+    // Variables to track progress
+    let completedLessons = 0;
+    let points = 0;
+
+    // Complete Lesson Function
+    function completeLesson(lessonNumber) {
+        completedLessons++;
+        points += 10;
+        document.getElementById('completed-lessons').innerText = completedLessons;
+        document.getElementById('points').innerText = points;
+        alert('Lesson ' + lessonNumber + ' completed!');
+
+        // Unlock achievement if it's the first lesson
+        if (completedLessons === 1) {
+            document.getElementById('achievement-1').style.display = 'block';
+        }
+    }
+
+    // Take Quiz Function
+    function takeQuiz(quizNumber) {
+        let quizPassed = confirm("Did you pass the quiz?");
+        if (quizPassed) {
+            points += 20;
+            document.getElementById('points').innerText = points;
+            alert('Quiz ' + quizNumber + ' passed!');
+
+            // Unlock achievement if it's the first quiz passed
+            document.getElementById('achievement-2').style.display = 'block';
+        }
+    }
+
+    // Post to Community Forum
+    function postForum(event) {
+        event.preventDefault();
+        let forumInput = document.getElementById('forum-input').value;
+        if (forumInput.trim()) {
+            let postDiv = document.createElement('div');
+            postDiv.classList.add('forum-post');
+            postDiv.innerHTML = `<p>${forumInput}</p>`;
+            document.getElementById('forum-posts').appendChild(postDiv);
+            document.getElementById('forum-input').value = '';
+        } else {
+            alert('Please write something before posting.');
+        }
+    }
+</script>
+
+</body>
+</html>
